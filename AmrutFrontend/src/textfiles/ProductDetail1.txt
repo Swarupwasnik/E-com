@@ -1,0 +1,171 @@
+import React, { useState, useEffect } from "react";
+import Layout from "../components/layout/Layout";
+import { useParams } from "react-router-dom";
+import { useCart } from "../context/cart";
+import axios from "axios";
+import "../../src/style.css";
+import toast from "react-hot-toast";
+const ProductDetail = () => {
+  const params = useParams();
+  const [product, setProduct] = useState({});
+  const [cart,setCart] = useCart([]);
+
+  const [relatedProducts, setRelatedProducts] = useState([]);
+  // inital details
+  useEffect(() => {
+    if (params?.slug) getProduct();
+  }, [params.slug]);
+ 
+//get product
+const getProduct = async () => {
+  try {
+    const { data } = await axios.get(
+      `http://localhost:8080/api/v1/product/get-product/${params.slug}`
+    );
+    setProduct(data.product);
+    // Check if category ID is available
+    // const categoryId = data.product.category?._id;
+    const categoryId = data.product && data.product.category ? data.product.category._id : null;
+
+    console.log("Category ID:", categoryId); // Debugging statement
+    if (categoryId) {
+      getSimilarProduct(data.product._id, categoryId);
+    } else {
+      console.log("Category ID not found for the product.");
+    }
+  } catch (err) {
+    console.log("Error fetching product:", err);
+  }
+};
+
+  const getSimilarProduct = async (productId, categoryId) => {
+    try {
+      console.log("Fetching related products with category ID:", categoryId); // Debugging statement
+      const { data } = await axios.get(
+        `http://localhost:8080/api/v1/product/related-product/${productId}/${categoryId}`
+      );
+      setRelatedProducts(data.product);
+    } catch (err) {
+      console.log("Error fetching related products:", err);
+    }
+  };
+  
+  
+
+  return (
+    <Layout>
+      {/* <!-- Product section--> */}
+      <section className="py-5">
+        <div className="container px-4 px-lg-5 my-5">
+          <div className="row gx-4 gx-lg-5 align-items-center">
+            <div className="col-md-6">
+              <img
+                height={"350px"}
+                width={"350px"}
+                className="card-img-top mb-5 mb-md-0"
+                src={`http://localhost:8080/api/v1/product/product-photo/${product._id}`}
+                alt={product.name}
+              />
+            </div>
+            <div className="col-md-6">
+              <div className="small mb-1">{product?.category?.name}</div>
+              <h1 className="display-5 fw-bolder">{product.name}</h1>
+              <div className="fs-5 mb-5">
+                <span className="text-decoration-line-through">$45.00</span>
+                <span>${product?.price}</span>
+                {/* <span>${product.shipping}</span> */}
+              </div>
+              <p className="lead">
+                {/* Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Praesentium at dolorem quidem modi. Nam sequi consequatur
+                obcaecati excepturi alias magni, accusamus eius blanditiis
+                delectus ipsam minima ea iste laborum vero? */}
+                {product.description}
+              </p>
+              <div className="d-flex">
+                <input
+                  className="form-control text-center me-3"
+                  id="inputQuantity"
+                  type="num"
+                  value="1"
+                  style={{ "max-width": "3rem" }}
+                />
+             <button
+  className="btn btn-outline-dark mt-auto"
+  type="button"
+  onClick={() => {
+    setCart([...cart, product]); // Change 'item' to 'product'
+    toast.success("Item Added to Cart");
+  }}
+>
+  <i className="bi-cart-fill me-1"></i>
+  Add to cart
+</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      {/* <!-- Related items section--> */}
+      <section className="py-5 bg-light">
+        <div className="container px-4 px-lg-5 mt-5">
+          {/* {JSON.stringify(relatedProducts,null,4)} */}
+          <h2 className="fw-bolder mb-4">Related products</h2>
+          <div className="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            {product && relatedProducts && relatedProducts.length > 0 ? (
+              relatedProducts.map((p) => (
+                <div className="col mb-5" key={p._id}>
+                  <div className="card h-100">
+                     <img
+                      className="card-img-top"
+                      src={`http://localhost:8080/api/v1/product/product-photo/${p._id}`}
+                      alt={p.name}
+                    /> 
+                    <div className="card-body p-4">
+                      <div className="text-center">
+                        <h5 className="fw-bolder">{p?.name}</h5>${p?.price}
+                      </div>
+                    </div>
+                    <div className="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                      <div className="text-center">
+                        <button className="btn btn-outline-dark mt-auto">
+                          Add to Cart
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p>No related products found.</p>
+            )}
+          </div>
+        </div>
+      </section>
+    </Layout>
+  );
+};
+
+export default ProductDetail;
+{/*         
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <div>
+
+
+          <h2>Job Postings</h2>
+          {jobPostings.map((job) => (
+            <div key={job._id}>
+              <h3>{job.jobTitle}</h3>
+              <p>Company: {job.company}</p>
+              <p>Location: {job.location}</p>
+              <p>Description: {job.description}</p>
+              <p>Status: {job.status}</p>
+              <p>Posted On: {new Date(job.postedOn).toLocaleDateString()}</p>
+              <p>Applied On: {new Date(job.appliedOn).toLocaleString()}</p>
+            </div>
+          ))}
+        </div>
+      )}
+    </div> */}

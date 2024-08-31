@@ -1,0 +1,90 @@
+ @tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing: border-box;
+  
+}
+
+
+.navbar{
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size: 17px;
+  line-height: 26px;
+  text-transform: uppercase;
+box-shadow: 0 8px 6px -6px gray;
+-webkit-box-shadow:0 8px 6px -6px gray;
+border-radius:  soild gray !important;
+}
+.nav-link{
+
+  font-weight: 300 !important;
+}
+.active{
+  color: chartreuse;
+}
+
+.navbar-brand{
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-weight: bolder;
+  letter-spacing: 2px;
+} 
+.navbae-brand:active{
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: coral;
+cursor: pointer;
+background-color: darkturquoise;
+
+}
+.footer{
+ color: white;
+ padding: 25px;
+ background-color: beige;
+ background: -webkit-linear-gradient( to right,gray,red);
+ background:linear-gradient(to right,gray,orange);
+}
+.footer a {
+text-decoration: none;
+color: aliceblue;
+padding:10px ;
+}
+.footer a:hover{
+  color: cornsilk;
+  border-bottom: 1px solid red;
+}
+
+#neubar {
+  background: #fae8d2;
+  box-shadow: 4px 6px 12px rgba(0,0,0,0.4)
+}
+
+.nav-item .active {
+  border-radius: 6px;
+  background: linear-gradient(145deg, #ffe7ca, #f5d7b2);
+  box-shadow:  4px 4px 8px #ddc1a0,
+               -4px -4px 8px #f7e5cc;
+}
+#neubar .dropdown-menu a:hover {
+  color:gray
+}
+#neubar .nav-item {
+  margin : auto 4px;
+}
+#neubar a {
+
+  padding-left:12px;
+  padding-right:12px;
+}
+#neubar .dropdown-menu {
+  background : whitesmoke
+}
+a.navbar-brand {
+  color: #454545
+} 
